@@ -1,48 +1,48 @@
 <template>
-    <div id="employee-form">
+    <div id="organization-form">
         <form @submit.prevent="handleSubmit">
-            <label for="name">Employee name</label>
+            <label for="name">Organization name</label>
             <input
                     id="name"
                     ref="first"
                     type="text"
                     class="input is-rounded is-primary"
                     :class="{ 'is-danger': submitting && invalidName }"
-                    v-model="employee.name"
+                    v-model="organization.name"
                     @focus="clearStatus"
                     @keypress="clearStatus"
             />
-            <label for="email">Employee Email</label>
+            <label for="legalEntity">Legal Entity</label>
             <input
-                    id="email"
+                    id="legalEntity"
                     type="text"
                     class="input is-rounded is-primary"
-                    :class="{ 'is-danger': submitting && invalidEmail }"
-                    v-model="employee.email"
+                    :class="{ 'is-danger': submitting && invalidLegalEntity }"
+                    v-model="organization.legalEntity"
                     @focus="clearStatus"
             />
             <p v-if="error && submitting" class="error-message">
                 ❗ Please fill out all required fields
             </p>
             <p v-if="success" class="success-message">
-                ✅ Employee successfully added
+                ✅ Organization successfully added
             </p>
-            <button class="button is-primary">Add Employee</button>
+            <button class="button is-primary">Add Organization</button>
         </form>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'employee-form',
+        name: 'organization-form',
         data() {
             return {
                 submitting: false,
                 error: false,
                 success: false,
-                employee: {
+                organization: {
                     name: '',
-                    email: '',
+                    legalEntity: '',
                 }
             }
         },
@@ -51,16 +51,16 @@
                 this.submitting = true;
                 this.clearStatus();
 
-                if (this.invalidName || this.invalidEmail) {
+                if (this.invalidName || this.invalidLegalEntity) {
                     this.error = true;
                     return
                 }
 
-                this.$emit('add:employee', this.employee);
+                this.$emit('add:organization', this.organization);
                 this.$refs.first.focus();
-                this.employee = {
+                this.organization = {
                     name: '',
-                    email: '',
+                    legalEntity: '',
                 };
                 this.error = false;
                 this.success = true;
@@ -74,11 +74,11 @@
         },
         computed: {
             invalidName() {
-                return this.employee.name === ''
+                return this.organization.name === ''
             },
 
-            invalidEmail() {
-                return this.employee.email === ''
+            invalidLegalEntity() {
+                return this.organization.legalEntity === ''
             },
         },
     }
