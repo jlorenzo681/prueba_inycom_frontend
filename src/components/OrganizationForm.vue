@@ -1,31 +1,33 @@
 <template>
     <div id="organization-form">
         <form @submit.prevent="handleSubmit">
-            <label for="name">Organization name</label>
-            <input
-                    id="name"
-                    ref="first"
-                    type="text"
-                    class="input is-rounded is-primary"
-                    :class="{ 'is-danger': submitting && invalidName }"
-                    v-model="organization.name"
-                    @focus="clearStatus"
-                    @keypress="clearStatus"
-            />
-            <label for="legalEntity">Legal Entity</label>
-            <input
-                    id="legalEntity"
-                    type="text"
-                    class="input is-rounded is-primary"
-                    :class="{ 'is-danger': submitting && invalidLegalEntity }"
-                    v-model="organization.legalEntity"
-                    @focus="clearStatus"
-            />
+            <div class="field">
+                <label for="name">Organization name</label>
+                <input
+                        id="name"
+                        ref="first"
+                        type="text"
+                        class="input is-rounded is-primary"
+                        :class="{ 'is-danger': submitting && invalidName }"
+                        v-model="organization.name"
+                        @focus="clearStatus"
+                        @keypress="clearStatus"
+                /></div>
+            <div class="field">
+                <label for="legalEntity">Legal Entity</label>
+                <input
+                        id="legalEntity"
+                        type="text"
+                        class="input is-rounded is-primary"
+                        :class="{ 'is-danger': submitting && invalidLegalEntity }"
+                        v-model="organization.legalEntity"
+                        @focus="clearStatus"
+                /></div>
             <p v-if="error && submitting" class="error-message">
-                ❗ Please fill out all required fields
+                Please fill out all required fields
             </p>
             <p v-if="success" class="success-message">
-                ✅ Organization successfully added
+                Organization successfully added
             </p>
             <button class="button is-primary">Add Organization</button>
         </form>
@@ -87,6 +89,9 @@
 <style scoped>
     form {
         margin-bottom: 2rem;
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     [class*='-message'] {

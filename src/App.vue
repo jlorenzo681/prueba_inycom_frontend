@@ -1,18 +1,30 @@
 <template>
     <div id="app" class="container">
-        <img alt="Vue logo" src="./assets/logo.png">
+        <figure class="image">
+            <img alt="Bulma logo" src="./assets/bulma.png">
+        </figure>
+
+        <section class="hero is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Organizations
+                    </h1>
+                </div>
+            </div>
+        </section>
 
         <OrganizationForm @add:organization="addOrganization"/>
+
         <OrganizationList :organizations="organizations"
                           @delete:organization="deleteOrganization"
-                          @edit:organization="editOrganization"
-        />
+                          @edit:organization="editOrganization"/>
 
     </div>
 </template>
 
 <script>
-    import OrganizationList from './components/OrganizationList'
+    import OrganizationList from './components/OrganizationList';
     import OrganizationForm from './components/OrganizationForm';
 
     export default {
@@ -23,45 +35,59 @@
         },
         data() {
             return {
-                organizations: [
-                    {
-                        id: 1,
-                        name: 'Richard Hendricks',
-                        legalEntity: 'richard@piedpiper.com',
-                    },
-                    {
-                        id: 2,
-                        name: 'Bertram Gilfoyle',
-                        legalEntity: 'gilfoyle@piedpiper.com',
-                    },
-                    {
-                        id: 3,
-                        name: 'Dinesh Chugtai',
-                        legalEntity: 'dinesh@piedpiper.com',
-                    },
-                ],
+                organizations: []
             }
         },
+        mounted() {
+            this.getOrganizations();
+        },
         methods: {
-            addOrganization(organization) {
-                const lastId =
-                    this.organizations.length > 0
-                        ? this.organizations[this.organizations.length - 1].id
-                        : 0;
-                const id = lastId + 1;
-                const newOrganization = {...organization, id};
+            async getOrganizations() {
+                try {
+                    const response = await fetch('http://localhost:8000/api/organizations');
+                    this.organizations = await response.json()
+                } catch (error) {
+                    alert(error);
+                }
+            },
 
-                this.organizations = [...this.organizations, newOrganization]
+            async addOrganization(organization) {
+                try {
+                    const response = await fetch('http://localhost:8000/api/organization', {
+                        method: 'POST',
+                        body: JSON.stringify(organization),
+                        headers: {"Content-type": "application/json; charset=UTF-8"}
+                    });
+                    const data = await response.json();
+                    this.organizations = [...this.organizations, data];
+                } catch (error) {
+                    alert(error)
+                }
             },
-            deleteOrganization(id) {
-                this.organizations = this.organizations.filter(
-                    organization => organization.id !== id
-                )
+
+            async editOrganization(id, updatedOrganizations) {
+                try {
+                    const response = await fetch(`http://localhost:8000/api/organization/${id}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(updatedOrganizations),
+                        headers: {"Content-type": "application/json; charset=UTF-8"}
+                    });
+                    const data = await response.json();
+                    this.organizations = this.organizations.map(organization => organization.id === id ? data : organization)
+                } catch (error) {
+                    alert(error)
+                }
             },
-            editOrganization(id, updatedOrganization) {
-                this.organizations = this.organizations.map(organization =>
-                    organization.id === id ? updatedOrganization : organization
-                )
+
+            async deleteOrganization(id) {
+                try {
+                    await fetch(`http://localhost:8000/api/organization/${id}`, {
+                        method: 'DELETE'
+                    });
+                    this.organizations = this.organizations.filter(organization => organization.id !== id)
+                } catch (error) {
+                    alert(error)
+                }
             },
         }
     }
@@ -75,6 +101,15 @@
         text-align: center;
         color: #2c3e50;
         margin-top: 60px;
+        width: 75%;
+    }
+
+    img, figure {
         width: 25%;
+        height: auto;
+    }
+
+    section {
+        margin-bottom: 1em;
     }
 </style>

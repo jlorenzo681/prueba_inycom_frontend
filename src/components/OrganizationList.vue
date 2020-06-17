@@ -13,24 +13,27 @@
                 <li v-for="organization in organizations" :key="organization.id" class="columns">
                     <div id="name" class="column">
                         <div v-if="editing === organization.id">
-                            <input type="text" v-model="organization.name"/>
+                            <input class="input is-rounded is-primary" type="text" v-model="organization.name"/>
                         </div>
                         <div v-else>{{organization.name}}</div>
                     </div>
                     <div id="legalEntity" class="column">
                         <div v-if="editing === organization.id">
-                            <input type="text" v-model="organization.legalEntity"/>
+                            <input class="input is-rounded is-primary" type="text" v-model="organization.legalEntity"/>
                         </div>
                         <div v-else>{{organization.legalEntity}}</div>
                     </div>
                     <div id="actions" class="column">
                         <div v-if="editing === organization.id">
-                            <button @click="editOrganization(organization)">Save</button>
-                            <button class="muted-button" @click="cancelEdit(organization)">Cancel</button>
+                            <button class="button is-primary is-small" @click="editOrganization(organization)">Save
+                            </button>
+                            <button class="button is-danger is-small" @click="cancelEdit(organization)">Cancel</button>
                         </div>
                         <div v-else>
-                            <button @click="editMode(organization)">Edit</button>
-                            <button @click="$emit('delete:organization', organization.id)">Delete</button>
+                            <button class="button is-primary is-small" @click="editMode(organization)">Edit</button>
+                            <button class="button is-danger is-small"
+                                    @click="$emit('delete:organization', organization.id)">Delete
+                            </button>
                         </div>
                     </div>
                 </li>
@@ -48,6 +51,7 @@
         data() {
             return {
                 editing: null,
+                cachedOrganization: null
             }
         },
         methods: {
@@ -75,6 +79,7 @@
     }
 
     #organization-list {
-        margin-top: 3rem;
+        margin-top: 5em;
     }
+
 </style>
