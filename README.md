@@ -1,5 +1,4 @@
-# vue-starting-forms
-
+# prueba_inycom_frontend
 ## Project setup
 ```
 yarn install
